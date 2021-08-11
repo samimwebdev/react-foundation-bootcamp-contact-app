@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import Contacts from './Contacts'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import axios from 'axios'
 
-import Nav from './Nav'
-import ContactDetails from './ContactDetails'
-import Home from './Home'
-import About from './About'
+import Contacts from './pages/Contacts'
+import Nav from './components/Nav'
+import ContactDetails from './pages/ContactDetails'
+import Home from './pages/Home'
+import About from './pages/About'
+import AddContact from './pages/AddContact'
 
 import './style.css'
-import contacts from './data.json'
 
 export default class App extends Component {
   state = {
@@ -18,13 +18,10 @@ export default class App extends Component {
 
   componentDidMount() {
     axios
-      .get(
-        'https://randomuser.me/api/?seed=myrandomdata&inc=name,email,login,gender,dob,picture&results=10'
-      )
-      .then(data => {
-        console.log(data.data.results)
+      .get('http://localhost:4000/contacts')
+      .then(({ data }) => {
         this.setState({
-          contacts: data.data.results
+          contacts: data
         })
       })
       .catch(err => console.log(err))
@@ -41,6 +38,9 @@ export default class App extends Component {
           </Route>
           <Route path='/about'>
             <About />
+          </Route>
+          <Route path='/add-contact'>
+            <AddContact />
           </Route>
           <Route path='/contacts/:id'>
             <ContactDetails contacts={contacts} />

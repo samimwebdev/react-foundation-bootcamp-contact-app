@@ -15,11 +15,10 @@ class ContactDetails extends Component {
   componentDidMount() {
     const id = this.props.match.params.id
     axios
-      .get(`https://randomuser.me/api/?login.uuid=${id}&seed=sjdgsadsh`)
-      .then(data => {
-        console.log(data.data.results[0])
+      .get(`http://localhost:4000/contacts/${id}`)
+      .then(({ data }) => {
         this.setState({
-          contact: data.data.results[0]
+          contact: data
         })
       })
       .catch(err => console.log(err))
@@ -42,17 +41,17 @@ class ContactDetails extends Component {
     return (
       <div className='card contact my-2' style={contactStyles}>
         <img
-          src={contact?.picture?.large}
+          src={contact?.picture}
           className='card-img-top'
-          alt={contact?.name?.first}
+          alt={contact?.first_name}
         />
         <div className='card-body'>
           <h5 className='card-title'>
-            {contact?.name?.first} {contact?.name?.last}
+            {contact?.first_name} {contact?.last_name}
           </h5>
           <p className='card-text'>{contact?.email}</p>
           <p className='card-text'>{contact?.gender}</p>
-          <p className='card-text'>Date of Birth:{contact?.dob?.date}</p>
+          <p className='card-text'>Date of Birth:{contact?.dob}</p>
         </div>
         <button
           className='btn btn-secondary'
