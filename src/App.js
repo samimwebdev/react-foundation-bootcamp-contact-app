@@ -8,6 +8,7 @@ import ContactDetails from './pages/ContactDetails'
 import Home from './pages/Home'
 import About from './pages/About'
 import AddContact from './pages/AddContact'
+import EditContact from './pages/EditContact'
 
 import './style.css'
 
@@ -44,6 +45,9 @@ export default class App extends Component {
           </Route>
           <Route path='/contacts/:id'>
             <ContactDetails contacts={contacts} />
+          </Route>
+          <Route path='/edit/:id'>
+            <EditContact />
           </Route>
           <Route path='/contacts'>
             <Contacts contacts={contacts} />

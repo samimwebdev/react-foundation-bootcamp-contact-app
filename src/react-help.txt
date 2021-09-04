@@ -62,3 +62,7 @@ contact Details
 //inline styles
 //global style
 //locally scoped style (component specific)
+
+C-Create
+R-Read
+UD

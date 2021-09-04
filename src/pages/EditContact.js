@@ -1,50 +1,63 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import { withRouter } from 'react-router-dom'
-
 import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+import axios from 'axios'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 
-class AddContact extends Component {
+dayjs.extend(customParseFormat)
+
+class EditContact extends Component {
   state = {
     firstName: '',
     lastName: '',
     email: '',
-    dob: new Date(),
+    dob: '',
     picture: '',
     gender: '',
     error: ''
-    // error: {
-    //   firstName: ''
-    // }
+  }
+
+  componentDidMount() {
+    const { id } = this.props.match.params
+    axios
+      .get(`http://localhost:4000/contacts/${id}`)
+      .then(({ data }) => {
+        const {
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          dob,
+          picture,
+          gender
+        } = data
+
+        this.setState({
+          firstName,
+          lastName,
+          email,
+          dob: dob && new Date(dob),
+          picture,
+          gender
+        })
+      })
+      .catch(err =>
+        this.setState({
+          error: err.message
+        })
+      )
   }
 
   handleChange = e => {
-    //firstName
-    //lastName
-    console.log(e.target.name, e.target.value)
     this.setState({
       [e.target.name]: e.target.value
     })
   }
 
-  handleDateChange = date => {
-    this.setState({
-      dob: date
-    })
-  }
-
   handleSubmit = e => {
     const { firstName, lastName, email, dob, picture, gender } = this.state
+    const { id } = this.props.match.params
     e.preventDefault()
-
-    // if(firstName === ''){
-    //   this.setState({
-    //     error: {
-    //       firstName: 'FirstName is required'
-    //     }
-    //   })
-    // }
 
     if (
       firstName === '' ||
@@ -58,35 +71,42 @@ class AddContact extends Component {
         error: 'Please fill all the input with valid info'
       })
     } else {
-      //valid input
-      console.log(this.state)
-      //sending API request to the server
+      //update data to the api server
       axios
-        .post('http://localhost:4000/contacts', {
+        .put(`http://localhost:4000/contacts/${id}`, {
           first_name: firstName,
           last_name: lastName,
           email,
-          dob,
           picture,
-          gender
+          gender,
+          dob
         })
-        .then(data => {
-          console.log(data)
-          this.props.history.push('/contacts')
-        })
-        .catch(err => console.log(err))
+        .then(({ data }) =>
+          this.props.history.push(`/contacts/${id}`, 'string')
+        )
+        .catch(err =>
+          this.setState({
+            error: err.message
+          })
+        )
     }
+  }
+  handleDateChange = date => {
+    this.setState({
+      dob: date
+    })
   }
 
   render() {
+    console.log(this.props.match.params.id)
     const {
       firstName,
       lastName,
       email,
       dob,
       picture,
-      error,
-      gender
+      gender,
+      error
     } = this.state
     return (
       <div
@@ -95,7 +115,7 @@ class AddContact extends Component {
           margin: '0 auto'
         }}
       >
-        <h2 className='text-center mt-3'>Add Contact</h2>
+        <h2 className='text-center mt-3'>Edit Contact</h2>
         {error && <div className='alert alert-danger'>{error}</div>}
         <form onSubmit={this.handleSubmit}>
           <div className='mb-3'>
@@ -177,4 +197,4 @@ class AddContact extends Component {
   }
 }
 
-export default withRouter(AddContact)
+export default withRouter(EditContact)
