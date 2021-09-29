@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { withRouter, Link } from 'react-router-dom'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import dayjs from 'dayjs'
 
@@ -9,11 +9,11 @@ const contactStyles = {
 }
 
 const ContactDetails = props => {
-  const [contact, setContact] = React.useEffect(null)
-  const [loading, setLoading] = React.useEffect(true)
+  const [contact, setContact] = React.useState(null)
+  const [loading, setLoading] = React.useState(true)
 
+  const id = props.match.params.id
   React.useEffect(() => {
-    const id = props.match.params.id
     axios
       .get(`http://localhost:4000/contacts/${id}`)
       .then(({ data }) => {
@@ -21,7 +21,7 @@ const ContactDetails = props => {
         setLoading(false)
       })
       .catch(err => console.log(err))
-  }, [])
+  }, [id])
 
   const handleDeleteContact = id => {
     axios
@@ -75,4 +75,4 @@ const ContactDetails = props => {
   )
 }
 
-export default withRouter(ContactDetails)
+export default ContactDetails

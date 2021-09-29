@@ -1,5 +1,4 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
 import axios from 'axios'
 
@@ -172,4 +171,4 @@ const EditContact = props => {
   )
 }
 
-export default withRouter(EditContact)
+export default EditContact

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import axios from 'axios'
 
@@ -9,6 +9,7 @@ import Home from './pages/Home'
 import About from './pages/About'
 import AddContact from './pages/AddContact'
 import EditContact from './pages/EditContact'
+import NotFound from './pages/NotFound'
 
 import './style.css'
 
@@ -33,24 +34,19 @@ const App = () => {
     <Router>
       <Nav />
       <Switch>
-        <Route exact path='/'>
-          <Home />
-        </Route>
-        <Route path='/about'>
-          <About />
-        </Route>
-        <Route path='/add-contact'>
-          <AddContact />
-        </Route>
-        <Route path='/contacts/:id'>
-          <ContactDetails contacts={contacts} />
-        </Route>
-        <Route path='/edit/:id'>
-          <EditContact />
-        </Route>
-        <Route path='/contacts'>
-          <Contacts contacts={contacts} />
-        </Route>
+        <Route exact path='/' component={Home} />
+        <Route path='/about' component={About} />
+        <Route path='/add-contact' component={AddContact} />
+        <Route
+          path='/contacts/:id'
+          render={props => <ContactDetails {...props} contacts={contacts} />}
+        />
+        <Route path='/edit/:id' component={EditContact} />
+        <Route
+          path='/contacts'
+          render={props => <Contacts {...props} contacts={contacts} />}
+        />
+        <Route component={NotFound} />
       </Switch>
     </Router>
   )
