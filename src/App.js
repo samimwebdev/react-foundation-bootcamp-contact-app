@@ -12,48 +12,48 @@ import EditContact from './pages/EditContact'
 
 import './style.css'
 
-export default class App extends Component {
-  state = {
+const App = () => {
+  const [state, setState] = React.useState({
     contacts: []
-  }
+  })
 
-  componentDidMount() {
+  React.useEffect(() => {
     axios
       .get('http://localhost:4000/contacts')
       .then(({ data }) => {
-        this.setState({
+        setState({
           contacts: data
         })
       })
       .catch(err => console.log(err))
-  }
+  }, [])
 
-  render() {
-    const { contacts } = this.state
-    return (
-      <Router>
-        <Nav />
-        <Switch>
-          <Route exact path='/'>
-            <Home />
-          </Route>
-          <Route path='/about'>
-            <About />
-          </Route>
-          <Route path='/add-contact'>
-            <AddContact />
-          </Route>
-          <Route path='/contacts/:id'>
-            <ContactDetails contacts={contacts} />
-          </Route>
-          <Route path='/edit/:id'>
-            <EditContact />
-          </Route>
-          <Route path='/contacts'>
-            <Contacts contacts={contacts} />
-          </Route>
-        </Switch>
-      </Router>
-    )
-  }
+  const { contacts } = state
+  return (
+    <Router>
+      <Nav />
+      <Switch>
+        <Route exact path='/'>
+          <Home />
+        </Route>
+        <Route path='/about'>
+          <About />
+        </Route>
+        <Route path='/add-contact'>
+          <AddContact />
+        </Route>
+        <Route path='/contacts/:id'>
+          <ContactDetails contacts={contacts} />
+        </Route>
+        <Route path='/edit/:id'>
+          <EditContact />
+        </Route>
+        <Route path='/contacts'>
+          <Contacts contacts={contacts} />
+        </Route>
+      </Switch>
+    </Router>
+  )
 }
+
+export default App

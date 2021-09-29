@@ -13,7 +13,7 @@ export default class Contact extends Component {
       <div className='card contact my-2' style={contactStyles}>
         <div className='card-body'>
           <h5 className='card-title'>
-            {contact.first_name} {contact.last_name}
+            {contact.firstName} {contact.lastName}
           </h5>
           <p className='card-text'>{contact.email}</p>
           <p className='card-text'>{contact.gender}</p>
@@ -28,10 +28,3 @@ export default class Contact extends Component {
     )
   }
 }
-
-//day/month/year
-
-//edit contact from navigation
-//id(route) , send server request(lifecycle), populate state (form filed filled),
-// send API request with updated data
-//redirect (/contacts)

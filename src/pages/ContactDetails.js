@@ -8,77 +8,71 @@ const contactStyles = {
   margin: '0 auto'
 }
 
-class ContactDetails extends Component {
-  state = {
-    contact: {},
-    loading: true
-  }
+const ContactDetails = props => {
+  const [contact, setContact] = React.useEffect(null)
+  const [loading, setLoading] = React.useEffect(true)
 
-  componentDidMount() {
-    const id = this.props.match.params.id
+  React.useEffect(() => {
+    const id = props.match.params.id
     axios
       .get(`http://localhost:4000/contacts/${id}`)
       .then(({ data }) => {
-        this.setState({
-          contact: data,
-          loading: false
-        })
+        setContact(data)
+        setLoading(false)
       })
       .catch(err => console.log(err))
-  }
-  handleDeleteContact = id => {
+  }, [])
+
+  const handleDeleteContact = id => {
     axios
       .delete(`http://localhost:4000/contacts/${id}`)
       .then(data => {
-        this.props.history.push('/contacts', 'str')
+        props.history.push('/contacts')
       })
       .catch(err => console.log(err))
   }
 
-  render() {
-    const { contact, loading } = this.state
-    return (
-      <>
-        {loading ? (
-          <p className='text-center'>loading....</p>
-        ) : (
-          <div className='card contact my-2' style={contactStyles}>
-            <img
-              src={contact?.picture}
-              className='card-img-top'
-              alt={contact?.first_name}
-            />
-            <div className='card-body'>
-              <h5 className='card-title'>
-                {contact?.first_name} {contact?.last_name}
-              </h5>
-              <p className='card-text'>{contact?.email}</p>
-              <p className='card-text'>{contact?.gender}</p>
-              <p className='card-text'>
-                Date of Birth:{dayjs(contact?.dob).format('DD/MM/YYYY')}
-              </p>
-            </div>
-            <button
-              className='btn btn-danger mb-2'
-              onClick={() => this.handleDeleteContact(contact.id)}
-            >
-              Delete Contact
-            </button>
-
-            <Link className='btn btn-info mb-2' to={`/edit/${contact.id}`}>
-              Edit Contact
-            </Link>
-            <button
-              className='btn btn-secondary'
-              onClick={() => this.props.history.goBack()}
-            >
-              Go Back
-            </button>
+  return (
+    <>
+      {loading ? (
+        <p className='text-center'>loading....</p>
+      ) : (
+        <div className='card contact my-2' style={contactStyles}>
+          <img
+            src={contact?.picture}
+            className='card-img-top'
+            alt={contact?.firstName}
+          />
+          <div className='card-body'>
+            <h5 className='card-title'>
+              {contact?.firstName} {contact?.lastName}
+            </h5>
+            <p className='card-text'>{contact?.email}</p>
+            <p className='card-text'>{contact?.gender}</p>
+            <p className='card-text'>
+              Date of Birth:{dayjs(contact?.dob).format('DD/MM/YYYY')}
+            </p>
           </div>
-        )}
-      </>
-    )
-  }
+          <button
+            className='btn btn-danger mb-2'
+            onClick={() => handleDeleteContact(contact.id)}
+          >
+            Delete Contact
+          </button>
+
+          <Link className='btn btn-info mb-2' to={`/edit/${contact.id}`}>
+            Edit Contact
+          </Link>
+          <button
+            className='btn btn-secondary'
+            onClick={() => props.history.goBack()}
+          >
+            Go Back
+          </button>
+        </div>
+      )}
+    </>
+  )
 }
 
 export default withRouter(ContactDetails)

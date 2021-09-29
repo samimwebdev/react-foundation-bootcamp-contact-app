@@ -1,51 +1,38 @@
-import React, { Component } from 'react'
+import React from 'react'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
-class AddContact extends Component {
-  state = {
+const AddContact = props => {
+  const [contact, setContact] = React.useState({
     firstName: '',
     lastName: '',
     email: '',
     dob: new Date(),
     picture: '',
-    gender: '',
+    gender: 'male',
     error: ''
-    // error: {
-    //   firstName: ''
-    // }
-  }
+  })
 
-  handleChange = e => {
-    //firstName
-    //lastName
-    console.log(e.target.name, e.target.value)
-    this.setState({
+  const handleChange = e => {
+    setContact({
+      ...contact,
       [e.target.name]: e.target.value
     })
   }
 
-  handleDateChange = date => {
-    this.setState({
+  const handleDateChange = date => {
+    setContact({
+      ...contact,
       dob: date
     })
   }
 
-  handleSubmit = e => {
-    const { firstName, lastName, email, dob, picture, gender } = this.state
+  const handleSubmit = e => {
+    const { firstName, lastName, email, dob, picture, gender } = contact
     e.preventDefault()
-
-    // if(firstName === ''){
-    //   this.setState({
-    //     error: {
-    //       firstName: 'FirstName is required'
-    //     }
-    //   })
-    // }
-
     if (
       firstName === '' ||
       lastName === '' ||
@@ -54,127 +41,116 @@ class AddContact extends Component {
       picture === '' ||
       gender === ''
     ) {
-      this.setState({
+      setContact({
+        ...contact,
         error: 'Please fill all the input with valid info'
       })
     } else {
-      //valid input
-      console.log(this.state)
       //sending API request to the server
       axios
-        .post('http://localhost:4000/contacts', {
-          first_name: firstName,
-          last_name: lastName,
-          email,
-          dob,
-          picture,
-          gender
-        })
+        .post('http://localhost:4000/contacts', contact)
         .then(data => {
-          console.log(data)
-          this.props.history.push('/contacts')
+          props.history.push('/contacts')
         })
         .catch(err => console.log(err))
     }
   }
 
-  render() {
-    const {
-      firstName,
-      lastName,
-      email,
-      dob,
-      picture,
-      error,
-      gender
-    } = this.state
-    return (
-      <div
-        style={{
-          width: '25rem',
-          margin: '0 auto'
-        }}
-      >
-        <h2 className='text-center mt-3'>Add Contact</h2>
-        {error && <div className='alert alert-danger'>{error}</div>}
-        <form onSubmit={this.handleSubmit}>
-          <div className='mb-3'>
-            <label htmlFor='firstName' className='form-label'>
-              First Name
-            </label>
-            <input
-              type='text'
-              value={firstName}
-              name='firstName'
-              onChange={this.handleChange}
-              className='form-control'
-            />
-          </div>
-          <div className='mb-3'>
-            <label htmlFor='lastName' className='form-label'>
-              Last Name
-            </label>
-            <input
-              type='text'
-              value={lastName}
-              name='lastName'
-              onChange={this.handleChange}
-              className='form-control'
-            />
-          </div>
+  const { firstName, lastName, email, dob, picture, error, gender } = contact
+  return (
+    <div
+      style={{
+        width: '25rem',
+        margin: '0 auto'
+      }}
+    >
+      <h2 className='text-center mt-3'>Add Contact</h2>
+      {error && <div className='alert alert-danger'>{error}</div>}
+      <form onSubmit={handleSubmit}>
+        <div className='mb-3'>
+          <label htmlFor='firstName' className='form-label'>
+            First Name
+          </label>
+          <input
+            type='text'
+            value={firstName}
+            name='firstName'
+            onChange={handleChange}
+            className='form-control'
+          />
+        </div>
+        <div className='mb-3'>
+          <label htmlFor='lastName' className='form-label'>
+            Last Name
+          </label>
+          <input
+            type='text'
+            value={lastName}
+            name='lastName'
+            onChange={handleChange}
+            className='form-control'
+          />
+        </div>
 
-          <div className='mb-3'>
-            <label htmlFor='email' className='form-label'>
-              Email address
-            </label>
-            <input
-              type='email'
-              value={email}
-              name='email'
-              onChange={this.handleChange}
-              className='form-control'
-            />
-          </div>
-          <div className='mb-3'>
-            <label htmlFor='dob' className='form-label'>
-              Date of Birth
-            </label>
-            <DatePicker selected={dob} onChange={this.handleDateChange} />
-          </div>
-          <div className='mb-3'>
-            <label htmlFor='picture' className='form-label'>
-              picture
-            </label>
-            <input
-              type='url'
-              value={picture}
-              name='picture'
-              onChange={this.handleChange}
-              className='form-control'
-            />
-          </div>
-          <div className='mb-3'>
-            <label>
-              Gender:
-              <select
-                name='gender'
-                value={gender}
-                onChange={this.handleChange}
-                className='form-select'
-              >
-                <option value='male'>Male</option>
-                <option value='female'>Female</option>
-              </select>
-            </label>
-          </div>
+        <div className='mb-3'>
+          <label htmlFor='email' className='form-label'>
+            Email address
+          </label>
+          <input
+            type='email'
+            value={email}
+            name='email'
+            onChange={handleChange}
+            className='form-control'
+          />
+        </div>
+        <div className='mb-3'>
+          <label htmlFor='dob' className='form-label'>
+            Date of Birth
+          </label>
+          <DatePicker
+            selected={dob}
+            showMonthDropdown
+            showYearDropdown
+            dateFormat='dd/MM/yyyy'
+            dropdownMode='select'
+            maxDate={new Date()}
+            onChange={handleDateChange}
+          />
+        </div>
+        <div className='mb-3'>
+          <label htmlFor='picture' className='form-label'>
+            picture
+          </label>
+          <input
+            type='url'
+            value={picture}
+            name='picture'
+            onChange={handleChange}
+            className='form-control'
+          />
+        </div>
+        <div className='mb-3'>
+          <label>
+            Gender:
+            <select
+              name='gender'
+              value={gender}
+              onChange={handleChange}
+              className='form-select'
+            >
+              <option value='male'>Male</option>
+              <option value='female'>Female</option>
+            </select>
+          </label>
+        </div>
 
-          <button type='submit' className='btn btn-primary'>
-            Submit
-          </button>
-        </form>
-      </div>
-    )
-  }
+        <button type='submit' className='btn btn-primary'>
+          Submit
+        </button>
+      </form>
+    </div>
+  )
 }
 
 export default withRouter(AddContact)
