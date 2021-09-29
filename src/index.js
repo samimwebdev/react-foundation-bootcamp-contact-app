@@ -2,4 +2,11 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import './style.css'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+import { ContactsProvider } from './context/Contacts.context'
+
+ReactDOM.render(
+  <ContactsProvider>
+    <App />
+  </ContactsProvider>,
+  document.getElementById('root')
+)

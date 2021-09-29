@@ -1,6 +1,5 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import axios from 'axios'
 
 import Contacts from './pages/Contacts'
 import Nav from './components/Nav'
@@ -14,22 +13,6 @@ import NotFound from './pages/NotFound'
 import './style.css'
 
 const App = () => {
-  const [state, setState] = React.useState({
-    contacts: []
-  })
-
-  React.useEffect(() => {
-    axios
-      .get('http://localhost:4000/contacts')
-      .then(({ data }) => {
-        setState({
-          contacts: data
-        })
-      })
-      .catch(err => console.log(err))
-  }, [])
-
-  const { contacts } = state
   return (
     <Router>
       <Nav />
@@ -37,15 +20,10 @@ const App = () => {
         <Route exact path='/' component={Home} />
         <Route path='/about' component={About} />
         <Route path='/add-contact' component={AddContact} />
-        <Route
-          path='/contacts/:id'
-          render={props => <ContactDetails {...props} contacts={contacts} />}
+        <Route path='/contacts/:id' component={ContactDetails} />
         />
         <Route path='/edit/:id' component={EditContact} />
-        <Route
-          path='/contacts'
-          render={props => <Contacts {...props} contacts={contacts} />}
-        />
+        <Route path='/contacts' component={Contacts} />
         <Route component={NotFound} />
       </Switch>
     </Router>
