@@ -1,8 +1,12 @@
 import React from 'react'
 import DatePicker from 'react-datepicker'
 import axios from 'axios'
+import { ContactsContext } from '../context/Contacts.context'
 
 const EditContact = props => {
+  const context = React.useContext(ContactsContext)
+  const { dispatch } = context
+
   const [contact, setContact] = React.useState({
     firstName: '',
     lastName: '',
@@ -58,7 +62,11 @@ const EditContact = props => {
       //update data to the api server
       axios
         .put(`${process.env.REACT_APP_API_URI}/contacts/${id}`, contact)
-        .then(({ data }) => props.history.push(`/contacts/${id}`))
+        .then(({ data }) => {
+          console.log('....')
+          dispatch({ type: 'UPDATE_CONTACT', payload: data })
+          props.history.push(`/contacts/${id}`)
+        })
         .catch(err =>
           setContact({
             ...contact,

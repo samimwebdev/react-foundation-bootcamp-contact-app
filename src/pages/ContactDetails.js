@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import dayjs from 'dayjs'
+import { ContactsContext } from '../context/Contacts.context'
 
 const contactStyles = {
   maxWidth: '18rem',
@@ -11,6 +12,8 @@ const contactStyles = {
 const ContactDetails = props => {
   const [contact, setContact] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
+  const context = React.useContext(ContactsContext)
+  const { dispatch } = context
 
   const id = props.match.params.id
   React.useEffect(() => {
@@ -27,6 +30,7 @@ const ContactDetails = props => {
     axios
       .delete(`${process.env.REACT_APP_API_URI}/contacts/${id}`)
       .then(data => {
+        dispatch({ type: 'DELETE_CONTACT', payload: id })
         props.history.push('/contacts')
       })
       .catch(err => console.log(err))

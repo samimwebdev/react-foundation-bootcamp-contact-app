@@ -10,7 +10,9 @@ const contactStyles = {
 const Contacts = props => {
   const context = React.useContext(ContactsContext)
   const [search, setSearch] = React.useState('')
-  const { contacts } = context
+  const { contacts } = context.state
+  console.log(context.dispatch({ type: 'RANDOM_ACTION', payload: '1' }))
+
   const filteredContacts =
     contacts.length > 0 &&
     contacts.filter(

@@ -4,8 +4,12 @@ import { withRouter } from 'react-router-dom'
 
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { ContactsContext } from '../context/Contacts.context'
 
 const AddContact = props => {
+  const context = React.useContext(ContactsContext)
+  const { dispatch } = context
+
   const [contact, setContact] = React.useState({
     firstName: '',
     lastName: '',
@@ -49,7 +53,8 @@ const AddContact = props => {
       //sending API request to the server
       axios
         .post(`${process.env.REACT_APP_API_URI}/contacts`, contact)
-        .then(data => {
+        .then(({ data }) => {
+          dispatch({ type: 'ADD_CONTACT', payload: contact })
           props.history.push('/contacts')
         })
         .catch(err => console.log(err))
