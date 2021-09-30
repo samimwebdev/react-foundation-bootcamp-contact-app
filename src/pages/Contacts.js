@@ -2,15 +2,35 @@ import React from 'react'
 import Contact from '../components/Contact'
 import { ContactsContext } from '../context/Contacts.context'
 
+const contactStyles = {
+  maxWidth: '18rem',
+  margin: '0 auto'
+}
+
 const Contacts = props => {
   const context = React.useContext(ContactsContext)
+  const [search, setSearch] = React.useState('')
   const { contacts } = context
+  const filteredContacts = contacts.filter(
+    contact =>
+      contact.firstName.includes(search) || contact.lastName.includes(search)
+  )
 
   return (
-    <div>
+    <div style={contactStyles}>
       <h2 className='text-center mb-3 mt-3'>All Contacts</h2>
-      {contacts.length > 0 &&
-        contacts.map(contact => <Contact contact={contact} key={contact.id} />)}
+      <input
+        type='search'
+        name='search'
+        className='form-control'
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        placeholder='search contact'
+      />
+      {filteredContacts.length > 0 &&
+        filteredContacts.map(contact => (
+          <Contact contact={contact} key={contact.id} />
+        ))}
     </div>
   )
 }
