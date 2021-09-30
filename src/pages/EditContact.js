@@ -57,7 +57,7 @@ const EditContact = props => {
     } else {
       //update data to the api server
       axios
-        .put(`${process.env.REACT_APP_API_URI}/${id}`, contact)
+        .put(`${process.env.REACT_APP_API_URI}/contacts/${id}`, contact)
         .then(({ data }) => props.history.push(`/contacts/${id}`))
         .catch(err =>
           setContact({

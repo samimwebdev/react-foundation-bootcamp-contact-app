@@ -25,7 +25,7 @@ const ContactDetails = props => {
 
   const handleDeleteContact = id => {
     axios
-      .delete(`${process.env.REACT_APP_API_URI}/${id}`)
+      .delete(`${process.env.REACT_APP_API_URI}/contacts/${id}`)
       .then(data => {
         props.history.push('/contacts')
       })
@@ -47,7 +47,7 @@ const ContactDetails = props => {
             <h5 className='card-title'>
               {contact?.firstName} {contact?.lastName}
             </h5>
-          <p className='card-text'>{contact?.email}</p>
+            <p className='card-text'>{contact?.email}</p>
             <p className='card-text'>{contact?.gender}</p>
             <p className='card-text'>
               Date of Birth:{dayjs(contact?.dob).format('DD/MM/YYYY')}
