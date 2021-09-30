@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/style.css"],"names":[],"mappings":"AAAA,SACE,cACF","file":"main.be841d92.chunk.css","sourcesContent":[".myClass {\r\n  background: red;\r\n}\r\n"]}
