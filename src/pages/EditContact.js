@@ -16,7 +16,7 @@ const EditContact = props => {
   const { id } = props.match.params
   React.useEffect(() => {
     axios
-      .get(`http://localhost:4000/contacts/${id}`)
+      .get(`${process.env.REACT_APP_API_URI}/contacts/${id}`)
       .then(({ data }) => {
         setContact({
           ...data,
@@ -57,7 +57,7 @@ const EditContact = props => {
     } else {
       //update data to the api server
       axios
-        .put(`http://localhost:4000/contacts/${id}`, contact)
+        .put(`${process.env.REACT_APP_API_URI}/${id}`, contact)
         .then(({ data }) => props.history.push(`/contacts/${id}`))
         .catch(err =>
           setContact({

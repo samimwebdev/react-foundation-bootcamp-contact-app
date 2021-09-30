@@ -48,7 +48,7 @@ const AddContact = props => {
     } else {
       //sending API request to the server
       axios
-        .post('http://localhost:4000/contacts', contact)
+        .post(`${process.env.REACT_APP_API_URI}/contacts`, contact)
         .then(data => {
           props.history.push('/contacts')
         })

@@ -11,10 +11,13 @@ const Contacts = props => {
   const context = React.useContext(ContactsContext)
   const [search, setSearch] = React.useState('')
   const { contacts } = context
-  const filteredContacts = contacts.filter(
-    contact =>
-      contact.firstName.includes(search) || contact.lastName.includes(search)
-  )
+  const filteredContacts =
+    contacts.length > 0 &&
+    contacts.filter(
+      contact =>
+        contact.firstName.includes(search) || contact.lastName.includes(search)
+    )
+  console.log(filteredContacts)
 
   return (
     <div style={contactStyles}>
@@ -27,10 +30,13 @@ const Contacts = props => {
         onChange={e => setSearch(e.target.value)}
         placeholder='search contact'
       />
-      {filteredContacts.length > 0 &&
+      {filteredContacts.length > 0 ? (
         filteredContacts.map(contact => (
           <Contact contact={contact} key={contact.id} />
-        ))}
+        ))
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   )
 }
